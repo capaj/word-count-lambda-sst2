@@ -10,7 +10,7 @@ function App() {
     setLoading(true)
     const VITE_APP_API_URL =
       import.meta.env.VITE_APP_API_URL ??
-      'https://s9359hws1d.execute-api.us-east-1.amazonaws.com'
+      'https://i3h8vgr0oh.execute-api.us-east-1.amazonaws.com' // prod url in case of missing env var
 
     try {
       const response = await fetch(VITE_APP_API_URL + '/wordTypeCount', {
@@ -32,6 +32,11 @@ function App() {
     }
   }
 
+  const resultFormatted = wordTypeCount
+    ? Object.entries(wordTypeCount)
+        .map(([type, count]) => `${type}: ${count}`)
+        .join('\n')
+    : ''
   return (
     <div
       style={{
@@ -72,20 +77,9 @@ function App() {
           {loading ? (
             'Loading ...'
           ) : (
-            <textarea
-              name={'output'}
-              disabled
-              value={
-                wordTypeCount
-                  ? Object.entries(wordTypeCount)
-                      .map(([type, count]) => `${type}: ${count}`)
-                      .join('\n')
-                  : ''
-              }
-              style={{
-                height: '300px'
-              }}
-            ></textarea>
+            <p>
+              <pre>{resultFormatted}</pre>
+            </p>
           )}
 
           <button type="submit">Submit</button>
